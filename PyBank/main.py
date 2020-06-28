@@ -9,8 +9,6 @@ csvpath = os.path.join('Resources', 'budget_data.csv')
 net_total_profit = 0
 last_profit = 0
 profit_difference = []
-# month = []
-# profit = []
 count_months = 0
 
     # Call the CSV and isolate the header row
@@ -21,8 +19,7 @@ with open(csvpath) as csvfile:
     for row in csvreader:
             # Count how many rows there are
         count_months = count_months + 1
-        # month.append(row[0])
-        # profit.append(row[1])
+        row.append(count_months)
             # Add the profit value to the running total
         net_total_profit = net_total_profit + int(row[1])
             # Calculate the change in profit from previous row
@@ -38,12 +35,18 @@ with open(csvpath) as csvfile:
         if profit_change == min(profit_difference):
             max_decr = profit_change
             max_decr_mth = row[0]
+
+            # Keep track of the first and final profit values        
+        if row[2] == 1:
+            first_profit = int(row[1])
+        if row[2] == count_months:
+            final_profit = int(row[1])
         
             # Set this month's profit as next month's last profit
         last_profit = int(row[1])
 
     # with the profit_difference list complete find the average
-average_change = round ( sum(profit_difference) / count_months , 2)
+average_change = round ( (final_profit - first_profit) / (count_months - 1) , 2)
 
     # Print the results in the terminal
 print("")

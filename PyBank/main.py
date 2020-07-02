@@ -51,13 +51,19 @@ average_change = round ( (final_profit - first_profit) / (count_months - 1) , 2)
     # Print the results in the terminal
 print("")
 print("Financial Analysis")
-print("------------------------------------------------------")
+print("---------------------------------------------------")
 print(f"Total Months: {count_months}")    
 print(f"Total: ${net_total_profit}")
 print(f"Average Change: ${average_change}")
-print(f"Greatest Increase in Profits: {max_incr_mth} with ${max_incr}")
-print(f"Greatest Decrease in Profits: {max_decr_mth} with ${max_decr}")
-print("------------------------------------------------------")
+if max_incr < 0:
+    print(f"Greatest Increase in Profits: ${max_incr} ({max_incr_mth})")
+else:
+    print(f"Greatest Increase in Profits: $ {max_incr} ({max_incr_mth})")
+if max_decr < 0:
+    print(f"Greatest Decrease in Profits: ${max_decr} ({max_decr_mth})")
+else:
+    print(f"Greatest Decrease in Profits: $ {max_decr} ({max_decr_mth})")
+print("---------------------------------------------------")
 
     # Provide the text file path
 txtpath = os.path.join('analysis', 'analysis.txt')
@@ -65,10 +71,16 @@ txtpath = os.path.join('analysis', 'analysis.txt')
     # Write to the text file
 with open(txtpath, "w") as txtfile:
     txtfile.write("Financial Analysis\n")
-    txtfile.write("------------------------------------------------------\n")
+    txtfile.write("---------------------------------------------------\n")
     txtfile.write(f"Total Months: {count_months}\n")   
     txtfile.write(f"Total: ${net_total_profit}\n")
     txtfile.write(f"Average Change: ${average_change}\n")
-    txtfile.write(f"Greatest Increase in Profits: {max_incr_mth} with ${max_incr}\n")
-    txtfile.write(f"Greatest Decrease in Profits: {max_decr_mth} with ${max_decr}\n")
-    txtfile.write("------------------------------------------------------\n")
+    if max_incr < 0:
+        txtfile.write(f"Greatest Increase in Profits: ${max_incr} ({max_incr_mth})\n")
+    else:
+        txtfile.write(f"Greatest Increase in Profits: $ {max_incr} ({max_incr_mth})\n")
+    if max_decr < 0:
+        txtfile.write(f"Greatest Decrease in Profits: ${max_decr} ({max_decr_mth})\n")
+    else:
+        txtfile.write(f"Greatest Decrease in Profits: $ {max_decr} ({max_decr_mth})\n")
+    txtfile.write("---------------------------------------------------\n")

@@ -7,11 +7,12 @@ csvpath = os.path.join('Resources', 'election_data.csv')
 
     # Define initial variables
 votes_counted = 0
+    # List the candidate to votes received
 votes = {}
+    # List the candidate to percentage of votes
 percentage = {}
-pcnt_cmp = []
-compare = {}
-winner = "Cacareco" # https://en.wikipedia.org/wiki/Cacareco
+    # Name of the winner
+winner = []
 
     # Call the CSV and isolate the header row
 with open(csvpath) as csvfile:
@@ -21,7 +22,6 @@ with open(csvpath) as csvfile:
     for row in csvreader:
             # Count the number of votes
         votes_counted = votes_counted + 1
-        row.append(votes_counted)
 
             # Is the candidate already on the tally?
         if row[2] not in votes:
@@ -31,19 +31,18 @@ with open(csvpath) as csvfile:
                 # Yes, add one to their vote count
             votes[row[2]] += 1
 
+    # Create a list with the final vote values        
+vote_values = list(votes.values())
+
     # Once all the calculations are done, figure percentages
 for candidate in votes:
         # Matching the rounded decimals
     percent_vote = "{:.3%}".format(votes[candidate] / votes_counted)
         # Add the candidate's percentage to be able to reference
     percentage[candidate] = percent_vote
-        # Add the percentage to be able to figure the maximum
-            # This could do with votes too but already figuring percentages
-    pcnt_cmp.append(percent_vote)
-    compare[percent_vote] = candidate
-
-    # Use the max pcnt_cmp to look up the candidate in the compare dictionary
-winner = compare[max(pcnt_cmp)]
+        # Match the name to the max of the final vote values
+    if votes[candidate] == max(vote_values):
+        winner.append(candidate)
 
     # Print the results to the terminal
 print("")
@@ -54,7 +53,15 @@ print("-------------------------")
 for candidate in votes:
     print(f"{candidate}: {percentage[candidate]} ({votes[candidate]})")
 print("-------------------------")
-print(f"Winner: {winner}")
+
+if len(winner) == 1:
+    for candidate in winner:
+        print(f"Winner: {candidate}")
+else:
+    print("There is a tie between:")
+    for candidate in winner:
+        print(f"{candidate}")
+
 print("-------------------------")
 
     # Provide the text file path
@@ -69,5 +76,13 @@ with open(txtpath, "w") as txtfile:
     for candidate in votes:
         txtfile.write(f"{candidate}: {percentage[candidate]} ({votes[candidate]})\n")
     txtfile.write("-------------------------\n")
-    txtfile.write(f"Winner: {winner}\n")
+
+    if len(winner) == 1:
+        for candidate in winner:
+            txtfile.write(f"Winner: {candidate}\n")
+    else:
+        txtfile.write("There is a tie between:\n")
+        for candidate in winner:
+            txtfile.write(f"{candidate}\n")
+
     txtfile.write("-------------------------\n")

@@ -23,7 +23,11 @@ with open(csvpath) as csvfile:
             # Add the profit value to the running total
         net_total_profit = net_total_profit + int(row[1])
             # Calculate the change in profit from previous row
-        profit_change = (int(row[1]) - last_profit)
+        if count_months != 1:
+            profit_change = (int(row[1]) - last_profit)
+            # First month has no change in profit
+        else:
+            profit_change = 0
             # Add this value to the profit difference list
         profit_difference.append(profit_change)
 
@@ -46,7 +50,7 @@ with open(csvpath) as csvfile:
         last_profit = int(row[1])
 
     # with the profit_difference list complete find the average
-average_change = round ( (final_profit - first_profit) / (count_months - 1) , 2)
+average_change = round ( sum(profit_difference) / (len(profit_difference ) - 1) , 2)
 
     # Print the results in the terminal
 print("")
@@ -64,6 +68,7 @@ if max_decr < 0:
 else:
     print(f"Greatest Decrease in Profits: $ {max_decr} ({max_decr_mth})")
 print("---------------------------------------------------")
+print("")
 
     # Provide the text file path
 txtpath = os.path.join('analysis', 'analysis.txt')
